@@ -3,50 +3,441 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>फोटो गैलरी</title>
+  <title>Marriage BioData & Magic Gallery</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #fff;
-      text-align: center;
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      font-family: 'Georgia', 'Times New Roman', serif;
     }
-    h1 {
+
+    body {
+      background-color: #f5eedc;
+      padding: 20px 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card-container {
+      background: #fffdf5;
+      width: 100%;
+      max-width: 750px;
+      border: 8px double #c59b27;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      position: relative;
+    }
+
+    .header-text {
+      text-align: center;
+      color: #8b0000;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .title {
+      text-align: center;
+      color: #8b0000;
+      font-size: 2.2rem;
+      font-family: 'Brush Script MT', cursive, serif;
       margin-bottom: 20px;
     }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 15px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .gallery img {
+
+    /* Details Table Styling */
+    .details-table {
       width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    .details-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .details-table td {
+      padding: 6px 0;
+      font-size: 0.95rem;
+      color: #7b2cbf;
+      font-weight: 600;
+    }
+
+    .details-table td.label {
+      width: 35%;
+      color: #7b2cbf;
+    }
+
+    .section-heading {
+      text-align: center;
+      color: #b8860b;
+      font-size: 1.5rem;
+      font-family: 'Brush Script MT', cursive, serif;
+      margin: 25px 0 15px 0;
+    }
+
+    .contact-box {
+      text-align: center;
+      color: #8b0000;
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .contact-box strong {
+      font-style: normal;
+    }
+
+    /* Bottom Girl DP Logo Gallery Trigger */
+    .bottom-gallery-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-top: 2px dashed #c59b27;
+      padding-top: 20px;
+      margin-top: 15px;
+    }
+
+    .dp-logo-trigger {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: #fff0f5;
+      border: 2px solid #ff758c;
+      padding: 8px 18px;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(255, 117, 140, 0.3);
       transition: transform 0.2s;
     }
-    .gallery img:hover {
+
+    .dp-logo-trigger:hover {
       transform: scale(1.05);
+    }
+
+    .dp-logo-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #d4af37;
+      animation: pulseDp 2s infinite;
+    }
+
+    @keyframes pulseDp {
+      0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+    }
+
+    .trigger-text {
+      color: #8b0000;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    /* Password Pop-up Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: #fffdf5;
+      padding: 25px;
+      border: 4px double #d4af37;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .modal-box h3 {
+      color: #8b0000;
+      margin-bottom: 15px;
+    }
+
+    .modal-box input {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #c59b27;
+      border-radius: 6px;
+      outline: none;
+      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .modal-box button {
+      padding: 8px 18px;
+      background: #8b0000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Touch Swipeable Magic Gallery Modal */
+    .gallery-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 10, 25, 0.95);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 90%;
+      max-width: 420px;
+      height: 420px;
+      overflow: hidden;
+      border: 4px solid #d4af37;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.7);
+      touch-action: pan-y;
+    }
+
+    .slide-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      user-select: none;
+      animation: sparkleMagic 0.8s ease-out;
+    }
+
+    .slide-img.active {
+      display: block;
+    }
+
+    @keyframes sparkleMagic {
+      0% {
+        opacity: 0;
+        transform: scale(0.7) rotate(-5deg);
+        filter: brightness(2) contrast(1.5) blur(8px);
+      }
+      50% {
+        filter: brightness(1.5) blur(2px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        filter: brightness(1) blur(0px);
+      }
+    }
+
+    .swipe-hint {
+      color: #d4af37;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .close-gallery {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.2);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
 <body>
 
-  <h1>मेरी फोटो गैलरी</h1>
+  <div class="card-container">
+    <div class="header-text">|| Shri Ganeshay Namah ||</div>
+    <div class="title">Biodata</div>
 
-  <div class="gallery">
-    <img src="photo1.jpg" alt="Photo 1">
-    <img src="photo2.jpg" alt="Photo 2">
-    <img src="photo3.jpg" alt="Photo 3">
-    <img src="photo4.jpg" alt="Photo 4">
-    <img src="photo5.jpg" alt="Photo 5">
+    <!-- Personal Details Section -->
+    <div class="details-table">
+      <table>
+        <tr><td class="label">Name</td><td>: Ragini Nishad</td></tr>
+        <tr><td class="label">Date of Birth</td><td>: 01/01/2005</td></tr>
+        <tr><td class="label">Place of Birth</td><td>: Jaunpur</td></tr>
+        <tr><td class="label">Rashi</td><td>: Libra </td></tr>
+        <tr><td class="label">Manglik</td><td>: No</td></tr>
+        <tr><td class="label">Religion</td><td>: Hindu</td></tr>
+        <tr><td class="label">Caste</td><td>: Mallha</td></tr>
+        <tr><td class="label">Height</td><td>: 4 ft. 7 in.</td></tr>
+        <tr><td class="label">Education</td><td>: Intermediate</td></tr>
+      </table>
+    </div>
+
+    <!-- Family Details Section -->
+    <div class="section-heading">Family Details</div>
+    <div class="details-table">
+      <table>
+        <tr><td class="label">Father Name</td><td>: Mr. Rajendra Nishad</td></tr>
+        <tr><td class="label">Occupation</td><td>: Senior Citizen</td></tr>
+        <tr><td class="label">Mother Name</td><td>: Mrs. Geeta Devi</td></tr>
+        <tr><td class="label">Occupation</td><td>: Housewife</td></tr>
+        <tr><td class="label">Sister</td><td>: 2 ( Elder - Married, Younger - Unmarried)</td></tr>
+        <tr><td class="label">Brother</td><td>: 1 ( Unmarried)</td></tr>
+      </table>
+    </div>
+
+    <!-- Contact Details Section -->
+    <div class="section-heading">Contact Details</div>
+    <div class="contact-box">
+      Behara Arka kerakat Jaunpur Uttar Pradesh<br>
+      Pin (222181)<br>
+      <strong>Contact No.</strong> 9892289002 / 8108282469
+    </div>
+
+    <!-- Bottom Girl DP Logo Gallery Trigger -->
+    <div class="bottom-gallery-section">
+      <div class="dp-logo-trigger" onclick="openPassModal()">
+        <span class="trigger-text">फोटो देखने के लिए यहाँ क्लिक करें 👈</span>
+        <img src="Girl_logo.png" class="dp-logo-img" alt="Girl Logo">
+      </div>
+    </div>
+
   </div>
+
+  <!-- Password Prompt Modal -->
+  <div id="passModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>🔒 पासवर्ड दर्ज करें</h3>
+      <input type="password" id="passInput" placeholder="Password">
+      <div>
+        <button onclick="checkPassword()">खोलें</button>
+        <button onclick="closePassModal()" style="background:#555;">बंद करें</button>
+      </div>
+      <p id="errorMsg" style="color:red; font-size:0.85rem; margin-top:8px; display:none;">गलत पासवर्ड!</p>
+    </div>
+  </div>
+
+  <!-- Touch Swipeable Magic Gallery Modal -->
+  <div id="galleryModal" class="gallery-modal">
+    <div class="close-gallery" onclick="closeGallery()">✕</div>
+    
+    <div class="slider-container" id="sliderContainer">
+      <img src="photo1.jpg" class="slide-img active" alt="Photo 1">
+      <img src="photo2.jpg" class="slide-img" alt="Photo 2">
+      <img src="photo3.jpg" class="slide-img" alt="Photo 3">
+      <img src="photo4.jpg" class="slide-img" alt="Photo 4">
+      <img src="photo5.jpg" class="slide-img" alt="Photo 5">
+    </div>
+
+    <div class="swipe-hint">👈 फोटो बदलने के लिए स्वाइप करें 👉</div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-img');
+
+    function openPassModal() {
+      document.getElementById('passModal').style.display = 'flex';
+      document.getElementById('passInput').value = '';
+      document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    function closePassModal() {
+      document.getElementById('passModal').style.display = 'none';
+    }
+
+    /* ✨ तारों की झंकार जैसा मैजिक साउंड इफ़ेक्ट (Sparkling Chime Sound) ✨ */
+    function playStarMagicSound() {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const frequencies = [1046.50, 1318.51, 1567.98, 2093.00, 2637.02];
+      
+      frequencies.forEach((freq, index) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const startTime = audioCtx.currentTime + (index * 0.08);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, startTime);
+
+        gain.gain.setValueAtTime(0.15, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.4);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(startTime);
+        osc.stop(startTime + 0.4);
+      });
+    }
+
+    function checkPassword() {
+      const correctPass = "1234"; // अपना पासवर्ड यहाँ बदलें
+      const userPass = document.getElementById('passInput').value;
+
+      if (userPass === correctPass) {
+        closePassModal();
+        playStarMagicSound();
+        document.getElementById('galleryModal').style.display = 'flex';
+        showSlide(0);
+      } else {
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    }
+
+    function closeGallery() {
+      document.getElementById('galleryModal').style.display = 'none';
+    }
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }
+
+    function changeSlide(direction) {
+      playStarMagicSound();
+      showSlide(currentSlide + direction);
+    }
+
+    /* Touch Swipe Logic (उंगली से दाएँ-बाएँ स्वाइप करने पर फोटो चेंज होगी) */
+    let startX = 0;
+    const sliderContainer = document.getElementById('sliderContainer');
+
+    sliderContainer.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    sliderContainer.addEventListener('touchend', (e) => {
+      let endX = e.changedTouches[0].clientX;
+      let diffX = startX - endX;
+
+      if (Math.abs(diffX) > 40) {
+        if (diffX > 0) {
+          changeSlide(1);  // Left Swipe -> Next Photo
+        } else {
+          changeSlide(-1); // Right Swipe -> Previous Photo
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>
